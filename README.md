@@ -10,22 +10,20 @@ Instructions for setup
     mkvirtualenv vampire
 
 2. Activate your virtual env
-For me I did 
+For me I did: 
 
     workon vampire
 
 With vampire being the name of my virtual environment but it'll 
 
 3. Install dependencies
-Change directory to vampireproject where requriements.txt is
+Change directory to vampireproject where requriements.txt is and do:
 
     pip install -r requirements.txt
 
 4. Create a dot-env file
 In the same directory create a file called .env.
 Put the folloing things in that file:
-
-.. code-block:: text
 
     FLASK_APP=vampire.py
     FLASK_ENV=development
