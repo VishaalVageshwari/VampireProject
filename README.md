@@ -33,7 +33,7 @@ Optionally you can also put a secret key in there:
     
 ```SECRET_KEY=WhateverYouWant```
 
-5. Intialize the database. I'm using flask-SQLAlchemy and a flask-migrate for database stuff so you might (probally will) want to have a look into those. Have a look at the db models they're in models.py and when your fine with those use these commands (you might not need that second command cause I'm going to include the migration in version control):
+5. Intialize the database. I'm using flask-SQLAlchemy and a flask-migrate for database stuff so you might (probally will) want to have a look into those. Have a look at the db models they're in models.py and when your fine with those use these commands (you only need to run the last command cause I've included a migration file):
 
 ```flask db init ```
 
