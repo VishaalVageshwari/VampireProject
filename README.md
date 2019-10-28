@@ -19,23 +19,26 @@ With vampire being the name of my virtual environment but it'll
 3. Install dependencies
 Change directory to vampireproject where requriements.txt is and do:
 
-    ```pip install -r requirements.txt```
+```pip install -r requirements.txt```
 
 4. Create a dot-env file
 In the same directory create a file called .env.
 Put the folloing things in that file:
 
 ```FLASK_APP=vampire.py```
+
 ```FLASK_ENV=development```
 
 Optionally you can also put a secret key in there:
     
-    SECRET_KEY=WhateverYouWant
+```SECRET_KEY=WhateverYouWant```
 
 5. Intialize the database. I'm using flask-SQLAlchemy and a flask-migrate for database stuff so you might (probally will) want to have a look into those. Have a look at the db models they're in models.py and when your fine with those use these commands (you might not need that second command cause I'm going to include the migration in version control):
 
 ```flask db init ```
+
 ```flask db migrate 'blood table'```
+
 ```flask db upgrade```
 
 6. Run flask app
