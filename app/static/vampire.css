@@ -1,0 +1,17 @@
+.vertical-center {
+  min-height: 100%;
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+}
+
+.icon-col {
+  color: rgb(255, 0, 0);
+}
+
+.veranda-h1 {
+  font-family: Verdana, Geneva, sans-serif; 
+  font-size: 27px; font-style: normal; 
+  font-variant: normal; 
+  font-weight: 400; line-height: 23px;
+}

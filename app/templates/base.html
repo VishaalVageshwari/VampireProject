@@ -1,0 +1,35 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block styles %}
+{{super()}}
+  <link rel="stylesheet" href="{{url_for('static', filename='vampire.css')}}">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+  {% if title %}{{ title }} - Vampire{% else %}{{ ('Welcome to Vampire') }}{% endif %}
+{% endblock %}
+
+{% block navbar %}
+  <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <div class="navbar-brand col-5 veranda-h1 text-white">
+      <i class="material-icons icon-col align-middle">favorite</i>
+      <span style="vertical-align: middle">Vampire</span>
+    </div>
+  </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {# application content needs to be provided in the app_content block #}
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}
