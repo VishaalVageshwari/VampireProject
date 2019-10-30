@@ -12,10 +12,10 @@
 {% endblock %}
 
 {% block navbar %}
-  <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-dark">
-    <div class="navbar-brand col-5 veranda-h1 text-white">
-      <img src="{{ url_for('static', filename='nav-logo.png') }}" class="align-middle">
-      <span style="vertical-align: middle">Vampire</span>
+  <nav class="navbar navbar-fixed-top navbar-expand-lg">
+    <div class="navbar-header">
+        <img src="{{ url_for('static', filename='nav-logo.png') }}" class="align-middle">
+        <a style="vertical-align: middle" class="navbar-brand veranda-h1" href="{{ url_for('main.index') }}">Vampire</a>
     </div>
   </nav>
 {% endblock %}
