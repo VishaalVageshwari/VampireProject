@@ -1,17 +1,6 @@
-import enum
 from datetime import datetime
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
-
-class BloodTypeEnum(enum.Enum):
-    ap = 'A+'
-    an = 'A-'
-    bp = 'B+'
-    bn = 'B-'
-    abp = 'AB+'
-    abn = 'AB-'
-    op = 'O+'
-    on = 'O-'
 
 
 # Donor's information is stored with blood because of the scope of the subsystem.
@@ -21,7 +10,7 @@ class Blood(db.Model):
     __tablename__ = 'blood'
 
     id = db.Column(db.Integer, primary_key=True)
-    blood_type = db.Column(db.Enum(BloodTypeEnum), nullable=False)
+    blood_type = db.Column(db.String(3), nullable=False)
     volume = db.Column(db.Integer, nullable=False)
     suitablity = db.Column(db.Boolean, nullable=False)
     use_by_date = db.Column(db.Date, nullable=False)
@@ -42,7 +31,7 @@ class Blood(db.Model):
 class RequestedBlood(db.Model):
     __tablename__ = 'requested_blood'
 
-    blood_type = db.Column(db.Enum(BloodTypeEnum), primary_key=True)
+    blood_type = db.Column(db.String(3), primary_key=True)
     volume = db.Column(db.Integer, nullable=False)
     blood_request_id = db.Column(db.Integer, db.ForeignKey('blood_request.id'))
 
