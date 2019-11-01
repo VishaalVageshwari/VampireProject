@@ -3,6 +3,7 @@ from app.models import Blood, RequestedBlood, BloodRequest, BloodOrder, MedicalF
 
 app = create_app()
 
+
 @app.shell_context_processor
 def make_shell_context():
     return {

@@ -6,9 +6,11 @@
 
 .veranda-h1 {
   font-family: Verdana, Geneva, sans-serif; 
-  font-size: 27px; font-style: normal; 
-  font-variant: normal; 
-  font-weight: 400; line-height: 23px;
+  font-size: 22px; 
+  font-style: normal; 
+  font-variant: normal;
+  font-weight: 400; 
+  line-height: 23px;
 }
 
 .navbar {
@@ -65,14 +67,14 @@
   color: #ffadae;
   background-color: #b61100;
 }
-.navbar .navbar-toggle {
+.navbar .navbar-toggler {
   border-color: #b61100;
 }
-.navbar .navbar-toggle:hover,
-.navbar .navbar-toggle:focus {
+.navbar .navbar-toggler:hover,
+.navbar .navbar-toggler:focus {
   background-color: #b61100;
 }
-.navbar .navbar-toggle .navbar-toggler-icon {
+.navbar .navbar-toggler .navbar-toggler-icon {
   color: #ffffff;
 }
 .navbar .navbar-collapse,
