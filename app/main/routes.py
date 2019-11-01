@@ -6,18 +6,6 @@ from app.main import bp
 def index():
   return render_template('index.html', title='Home')
 
-@bp.route('/requestBlood', methods=['GET'])
+@bp.route('/request_blood', methods=['GET'])
 def requestBloodPage():
-  return render_template('requestBloodPage.html', title='Medical Staff')
-
-@bp.route('/vampireStaff', methods=['GET'])
-def vampireStaffPage():
-  return render_template('vampireStaffPage.html', title='Vampire Staff')
-
-@bp.route('/bloodBank', methods=['GET'])
-def bloodBankPage():
-  return render_template('bloodBankPage.html', title='Blood Bank')
-
-@bp.route('/depositeBlood', methods=['GET'])
-def depositBloodPage():
-  return render_template('depositBloodPage.html', title='Deposit Blood')
+  return render_template('request_blood.html', title='Request Blood')
