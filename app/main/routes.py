@@ -27,5 +27,5 @@ def add_blood():
 
 
 @bp.route('/request_blood', methods=['GET'])
-def requestBloodPage():
+def request_blood():
     return render_template('request_blood.html', title='Request Blood')
