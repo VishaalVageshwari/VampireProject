@@ -9,4 +9,12 @@
       {{ wtf.quick_form(form) }}
     </div>
   </div>
+  </br></br>
+  {% for field in form.errors %}
+  {% for error in form.errors[field] %}
+    <div class="alert alert-danger">
+      {{error}}
+    </div>
+  {% endfor %}
+  {% endfor %}
 {% endblock %}
