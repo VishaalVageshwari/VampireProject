@@ -32,9 +32,14 @@ def add_blood():
 def request_blood():
     return render_template('request_blood.html', title='Request Blood')
 
-@bp.route('/view', methods=['GET'])
+@bp.route('/view', methods=['GET', 'POST'])
 def view_blood():
     today = date.today()
     blood = Blood.query.all()
-    blood_sorted = sorted(blood, key=lambda x: x.use_by_date)
+    blood_sorted = blood
+    if request.method == 'POST':
+        if request.form['sort'] == 'expiry':
+             blood_sorted = sorted(blood, key=lambda x: x.use_by_date)
+        elif  request.form['sort'] == 'volume':
+            blood_sorted = sorted(blood, key=lambda x: x.volume)
     return render_template('view_blood.html', blood = blood_sorted, date = today)
