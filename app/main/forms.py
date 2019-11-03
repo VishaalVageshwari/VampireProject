@@ -11,7 +11,7 @@ BLOOD_TYPES = [('A+', 'A+'), ('A-', 'A-'), ('B+', 'B+'), ('B-', 'B-'),
 class AddBloodForm(FlaskForm):
     blood_type = SelectField('Blood Type', choices=BLOOD_TYPES, validators=[InputRequired()])
     volume = IntegerField('Volume In Liters', validators=[InputRequired()])
-    use_by_date = DateField('Use-By-Date', format='%d-%m-%Y', validators=[InputRequired()])
+    use_by_date = DateField('Use-By-Date', format='%d-%m-%Y', render_kw={"placeholder": "dd-mm-yyyy"}, validators=[InputRequired()])
     location_donated = StringField('Location Donated', validators=[InputRequired()])
     donor_name = StringField('Donor\'s Full Name', validators=[InputRequired()])
     donor_email = StringField('Donor\'s Email', validators=[InputRequired(), Email()])

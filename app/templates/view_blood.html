@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block app_content %}
+
+  <div class="container flex-centre" style="height: 75vh;">
+    <div class="row jumbotron flex-centre">
+        <ul>
+            {% for b in blood %}
+            {% if b.use_by_date < date%}
+              <li style="color: red;">
+            {% else %}
+              <li>
+            {% endif %}
+                <span>"Blood type: "{{b.blood_type}} </span>
+                <span>"Blood volume: "{{b.volume}} </span>
+                <span>"Use-by date: "{{b.use_by_date}}</span>
+              </li>
+            {% endfor %}
+        </ul>
+    </div>
+  </div>
+
+{% endblock %}

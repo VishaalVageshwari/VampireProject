@@ -3,6 +3,7 @@ from app import db
 from app.main.forms import AddBloodForm
 from app.models import Blood
 from app.main import bp
+from datetime import date
 
 
 @bp.route('/', methods=['GET'])
@@ -21,6 +22,7 @@ def add_blood():
                 blood_donor_email=form.donor_email.data)
         db.session.add(blood)
         db.session.commit()
+        print('You added a blood donation to the system')
         flash('You added a blood donation to the system.')
         return redirect(url_for('main.add_blood'))
     return render_template('add_blood.html', title='Add Blood', form=form)
@@ -29,3 +31,10 @@ def add_blood():
 @bp.route('/request_blood', methods=['GET'])
 def request_blood():
     return render_template('request_blood.html', title='Request Blood')
+
+@bp.route('/view', methods=['GET'])
+def view_blood():
+    today = date.today()
+    blood = Blood.query.all()
+    blood_sorted = sorted(blood, key=lambda x: x.use_by_date)
+    return render_template('view_blood.html', blood = blood_sorted, date = today)
