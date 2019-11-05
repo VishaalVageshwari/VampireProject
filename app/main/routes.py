@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import db
 from app.main.forms import AddBloodForm
-from app.models import Blood
+from app.models import Blood, sort_type_volume, sort_expiry
 from app.main import bp
 from datetime import date
 
@@ -37,9 +37,13 @@ def view_blood():
     today = date.today()
     blood = Blood.query.all()
     blood_sorted = blood
+    display_format = 'donation'
     if request.method == 'POST':
         if request.form['sort'] == 'expiry':
-             blood_sorted = sorted(blood, key=lambda x: x.use_by_date)
+             #blood_sorted = sorted(blood, key=lambda x: x.use_by_date)
+             blood_sorted = sort_expiry(blood)
         elif  request.form['sort'] == 'volume':
-            blood_sorted = sorted(blood, key=lambda x: x.volume)
-    return render_template('view_blood.html', blood = blood_sorted, date = today)
+            #blood_sorted = sorted(blood, key=lambda x: x.volume)
+            blood_sorted = sort_type_volume(blood)
+            display_format = 'type'
+    return render_template('view_blood.html', blood = blood_sorted, date = today, display_format = display_format)

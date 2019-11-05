@@ -89,3 +89,48 @@ class MedicalFacility(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+#sorts blood donations by expiry date
+def sort_expiry(blood):
+    #bubble sort
+    for i in range(len(blood)):
+        for j in range(0, len(blood)-i-1):
+            if blood[j].use_by_date > blood[j+1].use_by_date :
+                blood[j], blood[j+1] = blood[j+1], blood[j]
+    return blood
+#for displaying the total volume for each blood type
+class BloodTypeVolume:
+    def __init__(self, blood_type, volume):
+        self.blood_type = blood_type
+        self.volume = volume
+#returns list of BloodTypeVolume sorted by volume
+#only counts volume of blood donation if not expired
+def sort_type_volume(blood):
+    a_plus,a_minus,b_plus,b_minus,ab_plus,o_plus,o_minus = 0,0,0,0,0,0,0
+    for i in range(len(blood)):
+        #skip expired blood
+        if blood[i].use_by_date <= datetime.today().date():
+            continue
+        if blood[i].blood_type == 'A+':
+            a_plus+=blood[i].volume
+        elif blood[i].blood_type == 'A-': 
+            a_minus+=blood[i].volume
+        elif blood[i].blood_type == 'AB+': 
+            ab_plus+=blood[i].volume
+        elif blood[i].blood_type == 'B+': 
+            b_plus+=blood[i].volume
+        elif blood[i].blood_type == 'B-': 
+            b_minus+=blood[i].volume
+        elif blood[i].blood_type == 'O+': 
+            o_plus+=blood[i].volume
+        elif blood[i].blood_type == 'O-': 
+            o_minus+=blood[i].volume
+    #list of BloodTypeVolume objects
+    type_volumes = [BloodTypeVolume("A+",a_plus),BloodTypeVolume("A-",a_minus),BloodTypeVolume("B+",b_plus),BloodTypeVolume("B-",b_minus),BloodTypeVolume("AB+",ab_plus),BloodTypeVolume("O+",o_plus),BloodTypeVolume("O-",o_minus)]
+    #bubble sort type_volume by volume
+    for i in range(len(type_volumes)):
+        for j in range(0, len(type_volumes)-i-1):
+            if type_volumes[j].volume > type_volumes[j+1].volume :
+                type_volumes[j], type_volumes[j+1] = type_volumes[j+1], type_volumes[j]
+    return type_volumes
+   
