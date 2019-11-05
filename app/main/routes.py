@@ -40,10 +40,8 @@ def view_blood():
     display_format = 'donation'
     if request.method == 'POST':
         if request.form['sort'] == 'expiry':
-             #blood_sorted = sorted(blood, key=lambda x: x.use_by_date)
              blood_sorted = sort_expiry(blood)
         elif  request.form['sort'] == 'volume':
-            #blood_sorted = sorted(blood, key=lambda x: x.volume)
             blood_sorted = sort_type_volume(blood)
             display_format = 'type'
     return render_template('view_blood.html', blood = blood_sorted, date = today, display_format = display_format)
