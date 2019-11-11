@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import db
-from app.main.forms import AddBloodForm
-from app.models import Blood, sort_type_volume, sort_expiry
+from app.main.forms import AddBloodForm, RequestBloodForm
+from app.models import Blood, sort_type_volume, sort_expiry, BloodRequest
 from app.main import bp
 from datetime import date
 
@@ -30,7 +30,8 @@ def add_blood():
 
 @bp.route('/request_blood', methods=['GET'])
 def request_blood():
-    return render_template('request_blood.html', title='Request Blood')
+    form = RequestBloodForm()
+    return render_template('request_blood.html', title='Request Blood', form=form)
 
 @bp.route('/view', methods=['GET', 'POST'])
 def view_blood():

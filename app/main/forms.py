@@ -38,4 +38,5 @@ class RequestBloodForm(FlaskForm):
     blood_type = SelectField('Blood Type', choices=BLOOD_TYPES, validators=[InputRequired()])
     volume = IntegerField('Volume in Liters', validators=[InputRequired()])
     delivery_date = DateField('Deliver-By Date', format='%d-%m-%Y', render_kw={"placeholder": "dd-mm-yyyy"}, validators=[InputRequired()])
+    submit = SubmitField('Submit')
 
