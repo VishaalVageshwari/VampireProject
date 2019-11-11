@@ -1,8 +1,9 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import db
 from app.main.forms import AddBloodForm
-from app.models import Blood, sort_type_volume, sort_expiry
+from app.models import Blood as dbBlood, sort_type_volume, sort_expiry
 from app.main import bp
+from app.main.models.Blood import Blood, get_all_blood
 from datetime import date
 
 
@@ -16,7 +17,7 @@ def index():
 def add_blood():
     form = AddBloodForm()
     if form.validate_on_submit():
-        blood = Blood(blood_type=form.blood_type.data, volume=form.volume.data,
+        blood = dbBlood(blood_type=form.blood_type.data, volume=form.volume.data,
                 suitablity=form.suitablity.data, use_by_date=form.use_by_date.data, 
                 location_donated=form.location_donated.data, blood_donor_name=form.donor_name.data, 
                 blood_donor_email=form.donor_email.data)
@@ -35,13 +36,13 @@ def request_blood():
 @bp.route('/view', methods=['GET', 'POST'])
 def view_blood():
     today = date.today()
-    blood = Blood.query.all()
-    blood_sorted = blood
+    # blood = Blood.query.all()
+    blood_sorted = get_all_blood()
     display_format = 'donation'
-    if request.method == 'POST':
-        if request.form['sort'] == 'expiry':
-             blood_sorted = sort_expiry(blood)
-        elif  request.form['sort'] == 'volume':
-            blood_sorted = sort_type_volume(blood)
-            display_format = 'type'
+    #if request.method == 'POST':
+        # if request.form['sort'] == 'expiry':
+        #      blood_sorted = sort_expiry(blood)
+        # elif  request.form['sort'] == 'volume':
+        #     blood_sorted = sort_type_volume(blood)
+        #     display_format = 'type'
     return render_template('view_blood.html', blood = blood_sorted, date = today, display_format = display_format)
