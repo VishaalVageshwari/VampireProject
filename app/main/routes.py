@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import db
 from app.main.forms import AddBloodForm
-from app.models import Blood
+from app.models import Blood, sort_type_volume, sort_expiry
 from app.main import bp
 from datetime import date
 
@@ -16,8 +16,8 @@ def add_blood():
     form = AddBloodForm()
     if form.validate_on_submit():
         blood = Blood(blood_type=form.blood_type.data, volume=form.volume.data,
-                suitablity=form.suitablity.data, use_by_date=form.use_by_date.data, 
-                location_donated=form.location_donated.data, blood_donor_name=form.donor_name.data, 
+                suitablity=form.suitablity.data, use_by_date=form.use_by_date.data,
+                location_donated=form.location_donated.data, blood_donor_name=form.donor_name.data,
                 blood_donor_email=form.donor_email.data)
         db.session.add(blood)
         db.session.commit()
@@ -36,12 +36,14 @@ def view_blood():
     today = date.today()
     blood = Blood.query.all()
     blood_sorted = blood
+    display_format = 'donation'
     if request.method == 'POST':
         if request.form['sort'] == 'expiry':
              blood_sorted = dateSort(blood)
         elif  request.form['sort'] == 'volume':
-            blood_sorted = sorted(blood, key=lambda x: x.volume)
-    return render_template('view_blood.html', blood = blood_sorted, date = today)
+            blood_sorted = sort_type_volume(blood)
+            display_format = 'type'
+    return render_template('view_blood.html', blood = blood_sorted, date = today, display_format = display_format)
 
 
 def dateSort(blood):
