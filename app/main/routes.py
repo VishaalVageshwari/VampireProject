@@ -28,11 +28,27 @@ def add_blood():
     return render_template('add_blood.html', title='Add Blood', form=form)
 
 
+def has_volume(blood_type, volume):
+    blood_entries = db.engine.execute("""
+        SELECT blood_type, volume
+          FROM blood
+    """)
+
+    has_volume = 0
+    for (entry_blood_type, entry_volume) in blood_entries:
+        if entry_blood_type == blood_type:
+            has_volume += entry_volume
+
+    return has_volume >= volume
+
 @bp.route('/request_blood', methods=['GET', 'POST'])
 def request_blood():
     form = RequestBloodForm()
     if form.validate_on_submit():
-        pass
+        if has_volume(blood_type=form.blood_type.data, volume=form.volume.data):
+            flash('The request can be satisfied')
+        else:
+            flash('Not enough blood to satisfy the request')
     return render_template('request_blood.html', title='Request Blood', form=form)
 
 @bp.route('/view', methods=['GET', 'POST'])
