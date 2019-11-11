@@ -5,7 +5,6 @@ from app.models import Blood
 from app.main import bp
 from datetime import date
 
-
 @bp.route('/', methods=['GET'])
 @bp.route('/index', methods=['GET'])
 def index():
@@ -39,7 +38,20 @@ def view_blood():
     blood_sorted = blood
     if request.method == 'POST':
         if request.form['sort'] == 'expiry':
-             blood_sorted = sorted(blood, key=lambda x: x.use_by_date)
+             blood_sorted = dateSort(blood)
         elif  request.form['sort'] == 'volume':
             blood_sorted = sorted(blood, key=lambda x: x.volume)
     return render_template('view_blood.html', blood = blood_sorted, date = today)
+
+
+def dateSort(blood):
+    i = 1
+    while i < len(blood):
+        j = i
+        while (j >= 1 and blood[j-1].use_by_date > blood[j].use_by_date):
+            temp = blood[j-1]
+            blood[j-1] = blood[j]
+            blood[j] = temp
+            j = j - 1
+        i = i + 1
+    return blood
