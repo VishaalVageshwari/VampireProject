@@ -17,8 +17,8 @@ def add_blood():
     form = AddBloodForm()
     if form.validate_on_submit():
         blood = Blood(blood_type=form.blood_type.data, volume=form.volume.data,
-                suitablity=form.suitablity.data, use_by_date=form.use_by_date.data, 
-                location_donated=form.location_donated.data, blood_donor_name=form.donor_name.data, 
+                suitablity=form.suitablity.data, use_by_date=form.use_by_date.data,
+                location_donated=form.location_donated.data, blood_donor_name=form.donor_name.data,
                 blood_donor_email=form.donor_email.data)
         db.session.add(blood)
         db.session.commit()
@@ -38,12 +38,26 @@ def has_volume(blood_type, volume):
 
     return has_volume >= volume
 
+def not_expired(blood_type, requestDate):
+    blood_entries = Blood.query.all()
+
+    earliest_date = 0
+    for blood in blood_entries:
+        if blood.blood_type == blood_type:
+            earliest_date = blood.use_by_date
+            if blood.use_by_date < earliest_date:
+                earliest_date = blood.use_by_date
+
+    return earliest_date >= requestDate
+
 @bp.route('/request_blood', methods=['GET', 'POST'])
 def request_blood():
     form = RequestBloodForm()
     if form.validate_on_submit():
         if has_volume(blood_type=form.blood_type.data, volume=form.volume.data):
-            flash('The request can be satisfied')
+            if not_expired(blood_type=form.blood_type.data, requestDate=form.delivery_date.data):
+                flash('The request can be satisfied')
+            else: flash('No suitable blood to satisfy the request')
         else:
             flash('Not enough blood to satisfy the request')
     return render_template('request_blood.html', title='Request Blood', form=form)
