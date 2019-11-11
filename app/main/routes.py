@@ -4,6 +4,7 @@ from app.main.forms import AddBloodForm, RequestBloodForm
 from app.models import Blood, sort_type_volume, sort_expiry, BloodRequest
 from app.main import bp
 from datetime import date
+from app.main.request import allocate_blood
 
 
 @bp.route('/', methods=['GET'])
@@ -27,39 +28,18 @@ def add_blood():
         return redirect(url_for('main.add_blood'))
     return render_template('add_blood.html', title='Add Blood', form=form)
 
-
-def has_volume(blood_type, volume):
-    blood_entries = Blood.query.all()
-
-    has_volume = 0
-    for blood in blood_entries:
-        if blood.blood_type == blood_type:
-            has_volume += blood.volume
-
-    return has_volume >= volume
-
-def not_expired(blood_type, requestDate):
-    blood_entries = Blood.query.all()
-
-    earliest_date = 0
-    for blood in blood_entries:
-        if blood.blood_type == blood_type:
-            earliest_date = blood.use_by_date
-            if blood.use_by_date < earliest_date:
-                earliest_date = blood.use_by_date
-
-    return earliest_date >= requestDate
-
 @bp.route('/request_blood', methods=['GET', 'POST'])
 def request_blood():
     form = RequestBloodForm()
     if form.validate_on_submit():
-        if has_volume(blood_type=form.blood_type.data, volume=form.volume.data):
-            if not_expired(blood_type=form.blood_type.data, requestDate=form.delivery_date.data):
-                flash('The request can be satisfied')
-            else: flash('No suitable blood to satisfy the request')
-        else:
-            flash('Not enough blood to satisfy the request')
+        blood_type = form.blood_type.data
+        volume = form.volume.data
+        delivery_date = form.delivery_date.data
+
+        blood = allocate_blood(blood_type=blood_type, volume=volume, delivery_date=delivery_date)
+        if blood is None:
+            flash('Not enough suitable blood to satisfy the request')
+
     return render_template('request_blood.html', title='Request Blood', form=form)
 
 @bp.route('/view', methods=['GET', 'POST'])
