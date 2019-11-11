@@ -32,3 +32,10 @@ class AddBloodForm(FlaskForm):
     def validate_suitablity(self, suitablity):
         if suitablity.data != True and suitablity.data != False:
             raise ValidationError('Blood suitablity is neither true or false.')
+
+
+class RequestBloodForm(FlaskForm):
+    blood_type = SelectField('Blood Type', choices=BLOOD_TYPES, validators=[InputRequired()])
+    volume = IntegerField('Volume in Liters', validators=[InputRequired()])
+    delivery_date = DateField('Deliver-By Date', format='%d-%m-%Y', render_kw={"placeholder": "dd-mm-yyyy"}, validators=[InputRequired()])
+
