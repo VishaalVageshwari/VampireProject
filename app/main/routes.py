@@ -29,15 +29,12 @@ def add_blood():
 
 
 def has_volume(blood_type, volume):
-    blood_entries = db.engine.execute("""
-        SELECT blood_type, volume
-          FROM blood
-    """)
+    blood_entries = Blood.query.all()
 
     has_volume = 0
-    for (entry_blood_type, entry_volume) in blood_entries:
-        if entry_blood_type == blood_type:
-            has_volume += entry_volume
+    for blood in blood_entries:
+        if blood.blood_type == blood_type:
+            has_volume += blood.volume
 
     return has_volume >= volume
 
