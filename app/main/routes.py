@@ -28,9 +28,11 @@ def add_blood():
     return render_template('add_blood.html', title='Add Blood', form=form)
 
 
-@bp.route('/request_blood', methods=['GET'])
+@bp.route('/request_blood', methods=['GET', 'POST'])
 def request_blood():
     form = RequestBloodForm()
+    if form.validate_on_submit():
+        pass
     return render_template('request_blood.html', title='Request Blood', form=form)
 
 @bp.route('/view', methods=['GET', 'POST'])

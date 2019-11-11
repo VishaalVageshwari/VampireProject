@@ -1,7 +1,7 @@
 from flask import request
 from flask_wtf import FlaskForm
 from wtforms import SelectField, IntegerField, DateField, BooleanField, StringField, SubmitField
-from wtforms.validators import ValidationError, InputRequired, Email
+from wtforms.validators import ValidationError, InputRequired, Email, NumberRange
 from app.models import Blood
 
 BLOOD_TYPES = [('A+', 'A+'), ('A-', 'A-'), ('B+', 'B+'), ('B-', 'B-'), 
@@ -36,7 +36,7 @@ class AddBloodForm(FlaskForm):
 
 class RequestBloodForm(FlaskForm):
     blood_type = SelectField('Blood Type', choices=BLOOD_TYPES, validators=[InputRequired()])
-    volume = IntegerField('Volume in Liters', validators=[InputRequired()])
+    volume = IntegerField('Volume in Liters', validators=[InputRequired(), NumberRange(min = 1)])
     delivery_date = DateField('Deliver-By Date', format='%d-%m-%Y', render_kw={"placeholder": "dd-mm-yyyy"}, validators=[InputRequired()])
     submit = SubmitField('Submit')
 
