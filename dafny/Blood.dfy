@@ -35,14 +35,4 @@ class Blood {
     donor_email := de;
     ordered := o;
   }
-
-  method OrderBlood()
-  requires Valid();
-  ensures Valid();
-  requires ordered == false;
-  ensures ordered == true;
-  modifies this;
-  {
-    ordered := true;
-  }
 }
