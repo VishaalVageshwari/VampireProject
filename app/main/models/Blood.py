@@ -53,7 +53,7 @@ class Blood:
 
     def __repr__(self):
         return '<Blood [ID : {0}], [Blood Type : {1}], [Blood Donor : {2}]>'\
-            .format(self.id, self.blood_type, self.donor_name)
+            .format(self.blood_id, self.blood_type, self.donor_name)
 
 
 def get_all_blood():
@@ -103,11 +103,33 @@ def bubblesort_expiration(blood, asc):
         j = 0
 
         while j < i:
-            if asc and (a[j].use_by_date > a[j + 1].use_by_date):
-                a[j], a[j + 1] = a[j + 1], a[j]
-            elif not asc and (a[j].use_by_date < a[j + 1].use_by_date)
-                a[j], a[j + 1] = a[j + 1], a[j]
+            if asc and (blood[j].use_by_date > blood[j + 1].use_by_date):
+                blood[j], blood[j + 1] = blood[j + 1], blood[j]
+            elif not asc and (blood[j].use_by_date < blood[j + 1].use_by_date):
+                blood[j], blood[j + 1] = blood[j + 1], blood[j]
 
             j += 1
     
-    i -= 1
+        i -= 1
+
+    return blood 
+
+
+def bubblesort_volume(blood, asc):
+    n = len(blood)
+    i = n - 1
+
+    while i > 0:
+        j = 0
+
+        while j < i:
+            if asc and (blood[j].volume > blood[j + 1].volume):
+                blood[j], blood[j + 1] = blood[j + 1], blood[j]
+            elif not asc and (blood[j].volume < blood[j + 1].volume):
+                blood[j], blood[j + 1] = blood[j + 1], blood[j]
+
+            j += 1
+    
+        i -= 1
+
+    return blood

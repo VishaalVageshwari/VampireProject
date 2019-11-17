@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% block app_content %}
 
+{% block app_content %}
 <form method="post">
   <input type="submit" value="expiry" name="sort"/>
   <input type="submit" value="volume" name="sort" />
@@ -9,9 +9,8 @@
   <div class="container flex-centre" style="height: 75vh;">
     <div class="row jumbotron flex-centre">
         <ul>
-            {% if display_format == "donation" %}
               {% for b in blood %}
-              {% if b.use_by_date < date %}
+              {% if b.volume < 5 %}
               <li style="color: red;">
               {% else %}
               <li>
@@ -22,18 +21,6 @@
                 <span>"Ordered: "{{b.ordered}}</span>
               </li>
               {% endfor %}
-            {% else %}
-              {% for b in blood %}
-              {% if b.volume < 5 %}
-              <li style="color: red;">
-              {% else %}
-              <li>
-              {% endif %}
-                <span>"Blood type: "{{b.blood_type}} </span>
-                <span>"Total volume: "{{b.volume}} </span>
-              </li>
-              {% endfor %}
-            {% endif %}  
         </ul>
     </div>
   </div>

@@ -3,7 +3,7 @@ from app import db
 from app.main.forms import AddBloodForm
 from app.models import Blood as dbBlood, sort_type_volume, sort_expiry
 from app.main import bp
-from app.main.models.Blood import Blood, get_all_blood
+from app.main.models.Blood import Blood, get_requestable_blood, bubblesort_expiration, bubblesort_volume
 from datetime import date
 
 
@@ -29,20 +29,19 @@ def add_blood():
     return render_template('add_blood.html', title='Add Blood', form=form)
 
 
-@bp.route('/request_blood', methods=['GET'])
-def request_blood():
-    return render_template('request_blood.html', title='Request Blood')
-
 @bp.route('/view', methods=['GET', 'POST'])
 def view_blood():
     today = date.today()
-    # blood = Blood.query.all()
-    blood_sorted = get_all_blood()
+    blood = get_requestable_blood()
+    blood_sorted = blood
     display_format = 'donation'
-    #if request.method == 'POST':
-        # if request.form['sort'] == 'expiry':
-        #      blood_sorted = sort_expiry(blood)
-        # elif  request.form['sort'] == 'volume':
-        #     blood_sorted = sort_type_volume(blood)
-        #     display_format = 'type'
-    return render_template('view_blood.html', blood = blood_sorted, date = today, display_format = display_format)
+    if request.method == 'POST':
+        if request.form['sort'] == 'expiry':
+            blood_sorted = bubblesort_expiration(blood, True)
+        elif  request.form['sort'] == 'volume':
+            blood_sorted = bubblesort_volume(blood, True)
+    return render_template('view_blood.html', blood=blood_sorted)
+
+@bp.route('/request_blood', methods=['GET'])
+def request_blood():
+    return render_template('request_blood.html', title='Request Blood')
