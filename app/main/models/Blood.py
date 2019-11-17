@@ -87,12 +87,13 @@ def get_all_blood():
 def get_requestable_blood():
     blood = get_all_blood()
     current_date = datetime.today().date()
+    requestable_blood = []
 
-    for index, b in enumerate(blood):
-        if b.ordered or not b.suitablity or current_date > b.use_by_date:
-            del blood[index]
+    for b in blood:
+        if not b.ordered and b.suitablity and current_date <= b.use_by_date:
+            requestable_blood.append(b)
 
-    return blood
+    return requestable_blood
 
 
 def bubblesort_expiration(blood, asc):
