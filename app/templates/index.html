@@ -17,18 +17,19 @@
       </thead>
       <tbody>
           {% for bl in blood_levels %}
-          {% if bl.total <= 3 %}
-            <tr class="text-danger">
-              <td>{{ bl.blood_type }}</td>
-              <td>{{ bl.total }}L</td>
-              <td>Critical</td>
-            </tr>
-          {% endif %}
-            <tr>
-              <td>{{ bl.blood_type }}</td>
-              <td>{{ bl.total }}L</td>
-              <td>Ok</td>
-            </tr>
+            {% if bl.total <= 3 %}
+              <tr class="text-danger">
+                <td>{{ bl.blood_type }}</td>
+                <td>{{ bl.total }}L</td>
+                <td>Critical</td>
+              </tr>
+            {%else%}
+              <tr>
+                <td>{{ bl.blood_type }}</td>
+                <td>{{ bl.total }}L</td>
+                <td>Ok</td>
+              </tr>
+            {% endif %}
           {% endfor %}
       </tbody>
     </table>
