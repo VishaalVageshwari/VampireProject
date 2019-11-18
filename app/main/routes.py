@@ -20,8 +20,8 @@ def add_blood():
     form = AddBloodForm()
     if form.validate_on_submit():
         blood = dbBlood(blood_type=form.blood_type.data, volume=form.volume.data,
-                suitablity=form.suitablity.data, use_by_date=form.use_by_date.data, 
-                location_donated=form.location_donated.data, blood_donor_name=form.donor_name.data, 
+                suitablity=form.suitablity.data, use_by_date=form.use_by_date.data,
+                location_donated=form.location_donated.data, blood_donor_name=form.donor_name.data,
                 blood_donor_email=form.donor_email.data)
         db.session.add(blood)
         db.session.commit()
@@ -71,6 +71,16 @@ def request_blood():
         if blood is None:
             flash('Not enough suitable blood to satisfy the request')
         else:
+            blood = get_requestable_blood()
+            blood = bubblesort_volume(blood, True)
+            volumeReceived = 0
+            for i in blood:
+                if i.blood_type == blood_type and volumeReceived < volume:
+                    volumeReceived = volumeReceived + 1
+                    i.volume = i.volume - 1
+                    if i.volume == 0 :
+                        blood.remove(i)
+
             flash('Your request has been successfully made')
 
     return render_template('request_blood.html', title='Request Blood', form=form)
