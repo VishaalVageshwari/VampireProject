@@ -19,8 +19,8 @@ def add_blood():
     form = AddBloodForm()
     if form.validate_on_submit():
         blood = dbBlood(blood_type=form.blood_type.data, volume=form.volume.data,
-                suitablity=form.suitablity.data, use_by_date=form.use_by_date.data, 
-                location_donated=form.location_donated.data, blood_donor_name=form.donor_name.data, 
+                suitablity=form.suitablity.data, use_by_date=form.use_by_date.data,
+                location_donated=form.location_donated.data, blood_donor_name=form.donor_name.data,
                 blood_donor_email=form.donor_email.data)
         db.session.add(blood)
         db.session.commit()
