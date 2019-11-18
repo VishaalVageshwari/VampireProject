@@ -4,7 +4,7 @@ from app.main.forms import AddBloodForm, ViewBloodForm, RequestBloodForm
 from app.models import Blood as dbBlood, RequestedBlood, BloodRequest, BloodOrder
 from app.main import bp
 from app.main.models.Blood import Blood, get_requestable_blood, bubblesort_expiration, \
-    bubblesort_volume, filter_blood_type
+    bubblesort_volume, filter_blood_type, get_ordered_blood
 from datetime import date
 from app.main.request import allocate_blood
 
@@ -89,3 +89,26 @@ def request_blood():
             flash('Your request has been successfully made')
 
     return render_template('request_blood.html', title='Request Blood', form=form)
+
+@bp.route('/ordered', methods=['GET', 'POST'])
+def ordered_blood():
+    form = ViewBloodForm()
+    today = date.today()
+    blood = get_ordered_blood()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            filter_type = form.filter_type.data
+            sort_type = form.sort_blood.data
+
+            if filter_type != 'No Filter':
+                blood = filter_blood_type(blood, filter_type)
+
+            if sort_type == 'Volume: Low-High':
+                blood = bubblesort_volume(blood, True)
+            elif sort_type == 'Volume: High-Low':
+                blood = bubblesort_volume(blood, False)
+            elif sort_type == 'Use-By-Date: Earliest-Latest':
+                blood = bubblesort_volume(blood, True)
+            elif sort_type == 'Use-By-Date: Latest-Earliest':
+                blood = bubblesort_volume(blood, False)
+    return render_template('view_blood.html', title='View Blood', blood=blood, form=form)
