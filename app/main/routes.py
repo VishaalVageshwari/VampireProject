@@ -40,7 +40,6 @@ def view_blood():
     bloodID = -1
     if request.method == 'POST':
         if "remove" in request.form:
-            flash(request.form.get("remove"))
             bloodId = request.form.get("remove")
             blood_to_remove = dbBlood.query.get(bloodId)
             db.session.delete(blood_to_remove)
