@@ -4,12 +4,15 @@
 {% block app_content %}
 <div class="container">
   <div>
-      {#{ wtf.quick_form(form) }#}
+    {{ wtf.quick_form(form) }}
   </div>
   </br></br></br>
   <div class="flex-centre">
     <table class="table">
       <thead class="thead-dark">
+        <tr>
+          <th colspan="7">Ordered Blood</th>
+        </tr>
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Blood Type</th>
@@ -25,7 +28,7 @@
           <tr>
             <td>{{ b.blood_id }}</td>
             <td>{{ b.blood_type }}</td>
-            <td>{{ b.volume }}</td>
+            <td>{{ b.volume }}L</td>
             <td>{{ b.use_by_date }}</td>
             <td>{{ b.location }}</td>
             <td>{{ b.donor_name }}</td>
