@@ -75,12 +75,10 @@ def request_blood():
             for i in blood:
                 if i.blood_type == blood_type and volumeReceived < volume:
                     volumeReceived = volumeReceived + 1
-                    i = Blood.query.get(i.blood_id)
                     i.volume -= 1
                     db.session.commit()
                     if i.volume == 0 :
-                        i = Blood.query.get(i.blood_id)
-                        db.session.delete(user)
+                        db.session.delete(i)
                         db.session.commit()
 
             flash('Your request has been successfully made')
