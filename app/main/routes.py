@@ -72,7 +72,7 @@ def request_blood():
             flash('Not enough suitable blood to satisfy the request')
         else:
             blood = get_requestable_blood()
-            blood = bubblesort_volume(blood, True)
+            blood = bubblesort_expiration(blood, True)
             volumeReceived = 0
             for i in blood:
                 if i.blood_type == blood_type and volumeReceived < volume:
