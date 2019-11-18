@@ -71,15 +71,17 @@ def request_blood():
         if blood is None:
             flash('Not enough suitable blood to satisfy the request')
         else:
-            blood = get_requestable_blood()
-            blood = bubblesort_expiration(blood, True)
             volumeReceived = 0
             for i in blood:
                 if i.blood_type == blood_type and volumeReceived < volume:
                     volumeReceived = volumeReceived + 1
-                    i.volume = i.volume - 1
+                    i = Blood.query.get(i.blood_id)
+                    i.volume -= 1
+                    db.session.commit()
                     if i.volume == 0 :
-                        blood.remove(i)
+                        i = Blood.query.get(i.blood_id)
+                        db.session.delete(user)
+                        db.session.commit()
 
             flash('Your request has been successfully made')
 
