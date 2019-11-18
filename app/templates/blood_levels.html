@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+</br></br></br>
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th>Total:</th>
+      <th>{{ blood_total }}L</th>
+    </tr>
+    <tr>
+      <th scope="col">Blood Type</th>
+      <th scope="col">Total Volume</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for bl in blood_levels %}
+        <tr>
+          <td>{{ bl.blood_type }}L</td>
+          <td>{{ bl.total }}L</td>
+        </tr>
+      {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
