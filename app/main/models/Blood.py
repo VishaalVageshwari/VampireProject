@@ -96,6 +96,41 @@ def get_requestable_blood():
     return requestable_blood
 
 
+def get_disposable_blood():
+    blood = get_all_blood()
+    current_date = datetime.today().date()
+    disposable_blood = []
+
+    for b in blood:
+        if not b,suitablity or current_date > b.use_by_date:
+            disposable_blood.append(b)
+
+    return disposable_blood
+
+
+def get_ordered_blood():
+    blood = get_all_blood()
+    ordered_blood = []
+
+    for b in blood:
+        if b.ordered:
+            ordered_blood.append(b)
+
+    return ordered_blood  
+
+
+def get_remove_blood():
+    blood = get_all_blood()
+    current_date = datetime.today().date()
+    remove_blood = []
+
+    for b in blood:
+        if b.ordered or not b,suitablity or current_date > b.use_by_date:
+            remove_blood.append(b)
+
+    return remove_blood  
+
+
 def bubblesort_expiration(blood, asc):
     n = len(blood)
     i = n - 1
@@ -134,6 +169,7 @@ def bubblesort_volume(blood, asc):
         i -= 1
 
     return blood
+
 
 def filter_blood_type(blood, blood_type):
     filtered_blood = []
