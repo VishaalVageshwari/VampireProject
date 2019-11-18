@@ -9,7 +9,6 @@ from app.main.models.Blood import Blood, BloodTypeLevel, get_requestable_blood, 
 from datetime import date
 from app.main.request import allocate_blood
 
-
 @bp.route('/', methods=['GET'])
 @bp.route('/index', methods=['GET'])
 def index():
@@ -38,11 +37,17 @@ def view_blood():
     today = date.today()
     blood = get_requestable_blood()
     display_format = 'donation'
+    bloodID = -1
     if request.method == 'POST':
-        if form.validate_on_submit():
+        if "remove" in request.form:
+            bloodId = request.form.get("remove")
+            blood_to_remove = dbBlood.query.get(bloodId)
+            db.session.delete(blood_to_remove)
+            db.session.commit()
+            blood = get_requestable_blood()
+        elif form.validate_on_submit():
             filter_type = form.filter_type.data
             sort_type = form.sort_blood.data
-
             if filter_type != 'No Filter':
                 blood = filter_blood_type(blood, filter_type)
 
