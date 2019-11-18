@@ -118,6 +118,7 @@ def remove_blood():
             blood_to_remove = dbBlood.query.get(bloodId)
             db.session.delete(blood_to_remove)
             db.session.commit()
+            blood = get_disposable_blood()
         elif form.validate_on_submit():
             filter_type = form.filter_type.data
             sort_type = form.sort_blood.data
@@ -132,4 +133,4 @@ def remove_blood():
                 blood = bubblesort_expiration(blood, True)
             elif sort_type == 'Use-By-Date: Latest-Earliest':
                 blood = bubblesort_expiration(blood, False)
-    return render_template('remove_blood.html', title='View Blood', blood=blood, form=form)
+    return render_template('remove_blood.html', title='Remove Blood', blood=blood, form=form)
