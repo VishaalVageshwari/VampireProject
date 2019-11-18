@@ -4,7 +4,7 @@ from app.main.forms import AddBloodForm, ViewBloodForm, RequestBloodForm
 from app.models import Blood as dbBlood, RequestedBlood, BloodRequest, BloodOrder
 from app.main import bp
 from app.main.models.Blood import Blood, BloodTypeLevel, get_requestable_blood, \
-    bubblesort_expiration, bubblesort_volume, filter_blood_type, get_blood_levels
+    bubblesort_expiration, bubblesort_volume, filter_blood_type, get_blood_levels, get_ordered_blood
 from datetime import date
 from app.main.request import allocate_blood
 
