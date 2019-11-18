@@ -3,7 +3,7 @@ from app.models import Blood as dbBlood, BloodOrder as dbBloodOrder
 
 class Blood:
 
-    def __init__(self, blood_id, blood_type, volume, suitablity, 
+    def __init__(self, blood_id, blood_type, volume, suitablity,
         use_by_date, location, donor_name, donor_email, ordered=False):
         self._blood_id = blood_id
         self._blood_type = blood_type
@@ -80,7 +80,7 @@ def get_all_blood():
             use_by_date, location, donor_name, donor_email, ordered)
 
         blood_list.append(blood)
-    
+
     return blood_list
 
 
@@ -102,7 +102,7 @@ def get_disposable_blood():
     disposable_blood = []
 
     for b in blood:
-        if not b,suitablity or current_date > b.use_by_date:
+        if not b.suitablity or current_date > b.use_by_date:
             disposable_blood.append(b)
 
     return disposable_blood
@@ -116,7 +116,7 @@ def get_ordered_blood():
         if b.ordered:
             ordered_blood.append(b)
 
-    return ordered_blood  
+    return ordered_blood
 
 
 def get_remove_blood():
@@ -125,10 +125,10 @@ def get_remove_blood():
     remove_blood = []
 
     for b in blood:
-        if b.ordered or not b,suitablity or current_date > b.use_by_date:
+        if b.ordered or not b.suitablity or current_date > b.use_by_date:
             remove_blood.append(b)
 
-    return remove_blood  
+    return remove_blood
 
 
 def bubblesort_expiration(blood, asc):
@@ -145,10 +145,10 @@ def bubblesort_expiration(blood, asc):
                 blood[j], blood[j + 1] = blood[j + 1], blood[j]
 
             j += 1
-    
+
         i -= 1
 
-    return blood 
+    return blood
 
 
 def bubblesort_volume(blood, asc):
@@ -165,7 +165,7 @@ def bubblesort_volume(blood, asc):
                 blood[j], blood[j + 1] = blood[j + 1], blood[j]
 
             j += 1
-    
+
         i -= 1
 
     return blood
@@ -177,5 +177,5 @@ def filter_blood_type(blood, blood_type):
     for b in blood:
         if b.blood_type == blood_type:
             filtered_blood.append(b)
-    
+
     return filtered_blood
