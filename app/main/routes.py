@@ -3,8 +3,7 @@ from app import db
 from app.main.forms import AddBloodForm, ViewBloodForm
 from app.models import Blood as dbBlood
 from app.main import bp
-from app.main.models.Blood import Blood, get_requestable_blood, bubblesort_expiration, \
-    bubblesort_volume, filter_blood_type
+from app.main.models.Blood import Blood, get_requestable_blood, bubblesort_expiration, bubblesort_volume, filter_blood_type
 from datetime import date
 
 @bp.route('/', methods=['GET'])
@@ -35,11 +34,18 @@ def view_blood():
     today = date.today()
     blood = get_requestable_blood()
     display_format = 'donation'
+    bloodID = -1
     if request.method == 'POST':
-        if form.validate_on_submit():
+        if "remove" in request.form:
+            flash(request.form.get("remove"))
+            bloodId = request.form.get("remove")
+            blood_to_remove = dbBlood.query.get(bloodId)
+            db.session.delete(blood_to_remove)
+            db.session.commit()
+            blood = get_requestable_blood()
+        elif form.validate_on_submit():
             filter_type = form.filter_type.data
             sort_type = form.sort_blood.data
-
             if filter_type != 'No Filter':
                 blood = filter_blood_type(blood, filter_type)
 
@@ -48,9 +54,9 @@ def view_blood():
             elif sort_type == 'Volume: High-Low':
                 blood = bubblesort_volume(blood, False)
             elif sort_type == 'Use-By-Date: Earliest-Latest':
-                blood = bubblesort_volume(blood, True)
+                blood = bubblesort_expiration(blood, True)
             elif sort_type == 'Use-By-Date: Latest-Earliest':
-                blood = bubblesort_volume(blood, False)
+                blood = bubblesort_expiration(blood, False)
     return render_template('view_blood.html', title='View Blood', blood=blood, form=form)
 
 @bp.route('/request_blood', methods=['GET'])
