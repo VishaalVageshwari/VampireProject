@@ -94,7 +94,7 @@ def ordered_blood():
                 blood = bubblesort_volume(blood, True)
             elif sort_type == 'Use-By-Date: Latest-Earliest':
                 blood = bubblesort_volume(blood, False)
-    return render_template('view_blood.html', title='View Blood', blood=blood, form=form)
+    return render_template('view_ordered.html', title='View Blood', blood=blood, form=form)
 
 
 @bp.route('/', methods=['GET'])
