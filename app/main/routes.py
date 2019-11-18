@@ -1,8 +1,10 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import db
-from app.main.forms import AddBloodForm
-from app.models import Blood, sort_type_volume, sort_expiry
+from app.main.forms import AddBloodForm, ViewBloodForm
+from app.models import Blood as dbBlood
 from app.main import bp
+from app.main.models.Blood import Blood, get_requestable_blood, bubblesort_expiration, \
+    bubblesort_volume, filter_blood_type
 from datetime import date
 
 @bp.route('/', methods=['GET'])
@@ -15,7 +17,7 @@ def index():
 def add_blood():
     form = AddBloodForm()
     if form.validate_on_submit():
-        blood = Blood(blood_type=form.blood_type.data, volume=form.volume.data,
+        blood = dbBlood(blood_type=form.blood_type.data, volume=form.volume.data,
                 suitablity=form.suitablity.data, use_by_date=form.use_by_date.data,
                 location_donated=form.location_donated.data, blood_donor_name=form.donor_name.data,
                 blood_donor_email=form.donor_email.data)
@@ -27,33 +29,30 @@ def add_blood():
     return render_template('add_blood.html', title='Add Blood', form=form)
 
 
+@bp.route('/view', methods=['GET', 'POST'])
+def view_blood():
+    form = ViewBloodForm()
+    today = date.today()
+    blood = get_requestable_blood()
+    display_format = 'donation'
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            filter_type = form.filter_type.data
+            sort_type = form.sort_blood.data
+
+            if filter_type != 'No Filter':
+                blood = filter_blood_type(blood, filter_type)
+
+            if sort_type == 'Volume: Low-High':
+                blood = bubblesort_volume(blood, True)
+            elif sort_type == 'Volume: High-Low':
+                blood = bubblesort_volume(blood, False)
+            elif sort_type == 'Use-By-Date: Earliest-Latest':
+                blood = bubblesort_volume(blood, True)
+            elif sort_type == 'Use-By-Date: Latest-Earliest':
+                blood = bubblesort_volume(blood, False)
+    return render_template('view_blood.html', title='View Blood', blood=blood, form=form)
+
 @bp.route('/request_blood', methods=['GET'])
 def request_blood():
     return render_template('request_blood.html', title='Request Blood')
-
-@bp.route('/view', methods=['GET', 'POST'])
-def view_blood():
-    today = date.today()
-    blood = Blood.query.all()
-    blood_sorted = blood
-    display_format = 'donation'
-    if request.method == 'POST':
-        if request.form['sort'] == 'expiry':
-             blood_sorted = dateSort(blood)
-        elif  request.form['sort'] == 'volume':
-            blood_sorted = sort_type_volume(blood)
-            display_format = 'type'
-    return render_template('view_blood.html', blood = blood_sorted, date = today, display_format = display_format)
-
-
-def dateSort(blood):
-    i = 1
-    while i < len(blood):
-        j = i
-        while (j >= 1 and blood[j-1].use_by_date > blood[j].use_by_date):
-            temp = blood[j-1]
-            blood[j-1] = blood[j]
-            blood[j] = temp
-            j = j - 1
-        i = i + 1
-    return blood
