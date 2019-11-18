@@ -6,32 +6,32 @@
   <div class="card-header text-danger">
     Blood Level Warnings
   </div>
-  <table class="table">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">Blood Type</th>
-        <th scope="col">Total Volume</th>
-        <th scope="col">Status</th>
-      </tr>
-    </thead>
-    <tbody>
-        {% for bl in blood_levels %}
-        {% if bl.total <= 3 %}
-          <tr class="text-danger">
-            <td>{{ bl.blood_type }}</td>
-            <td>{{ bl.total }}</td>
-            <td>Critical</td>
-          </tr>
-        {% endif %}
-          <tr>
-            <td>{{ bl.blood_type }}</td>
-            <td>{{ bl.total }}</td>
-            <td>Ok</td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-    <div class="card-body">
+  <div class="card-body">
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Blood Type</th>
+          <th scope="col">Total Volume</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for bl in blood_levels %}
+          {% if bl.total <= 3 %}
+            <tr class="text-danger">
+              <td>{{ bl.blood_type }}</td>
+              <td>{{ bl.total }}L</td>
+              <td>Critical</td>
+            </tr>
+          {% endif %}
+            <tr>
+              <td>{{ bl.blood_type }}</td>
+              <td>{{ bl.total }}L</td>
+              <td>Ok</td>
+            </tr>
+          {% endfor %}
+      </tbody>
+    </table>
   </div>
 </div>
 {% endblock %}

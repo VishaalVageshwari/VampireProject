@@ -4,7 +4,8 @@ from app.main.forms import AddBloodForm, ViewBloodForm, RequestBloodForm
 from app.models import Blood as dbBlood, RequestedBlood, BloodRequest, BloodOrder
 from app.main import bp
 from app.main.models.Blood import Blood, BloodTypeLevel, get_requestable_blood, \
-    bubblesort_expiration, bubblesort_volume, filter_blood_type, get_blood_levels, get_ordered_blood
+    bubblesort_expiration, bubblesort_volume, filter_blood_type, get_blood_levels, \
+    get_ordered_blood, get_total_blood_volume
 from datetime import date
 from app.main.request import allocate_blood
 
@@ -113,3 +114,11 @@ def ordered_blood():
             elif sort_type == 'Use-By-Date: Latest-Earliest':
                 blood = bubblesort_volume(blood, False)
     return render_template('view_blood.html', title='View Blood', blood=blood, form=form)
+
+
+@bp.route('/', methods=['GET'])
+@bp.route('/blood_levels', methods=['GET'])
+def blood_levels():
+    blood_levels = get_blood_levels()
+    blood_total = get_total_blood_volume()
+    return render_template('blood_levels.html', title='Blood Levels', blood_total=blood_total, blood_levels=blood_levels)
