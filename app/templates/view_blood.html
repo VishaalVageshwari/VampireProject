@@ -1,16 +1,12 @@
 {% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
 <div class="container">
-<div>
-  <form method="post">
-    <input type="submit" value="expiry" name="sort"/>
-    <input type="submit" value="volume" name="sort" />
-  </form>
-</div>
-</br>
-</br>
-</br>
+  <div>
+      {{ wtf.quick_form(form) }}
+  </div>
+  </br></br></br>
   <div class="flex-centre">
     <table class="table">
       <thead class="thead-dark">

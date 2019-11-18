@@ -7,6 +7,11 @@ from app.models import Blood
 BLOOD_TYPES = [('A+', 'A+'), ('A-', 'A-'), ('B+', 'B+'), ('B-', 'B-'), 
     ('AB+', 'AB+'), ('AB+', 'AB+'), ('O+', 'O+'), ('O-', 'O-')]
 
+SORT_TYPES = [('Default', 'Default'),('Volume: Low-High', 'Volume: Low-High'),
+    ('Volume: High-Low', 'Volume: High-Low'), ('Use-By-Date: Earliest-Latest', 'Use-By-Date: Earliest-Latest'),
+    ('Use-By-Date: Latest-Earliest', 'Use-By-Date: Latest-Earliest')]
+
+FILTER_TYPES = [('No Filter', 'No Filter')] + BLOOD_TYPES
 
 class AddBloodForm(FlaskForm):
     blood_type = SelectField('Blood Type', choices=BLOOD_TYPES, validators=[InputRequired()])
@@ -32,3 +37,8 @@ class AddBloodForm(FlaskForm):
     def validate_suitablity(self, suitablity):
         if suitablity.data != True and suitablity.data != False:
             raise ValidationError('Blood suitablity is neither true or false.')
+
+class ViewBloodForm(FlaskForm):
+    filter_type = SelectField('Filter By Blood Type', choices=FILTER_TYPES, validators=[InputRequired()])
+    sort_blood = SelectField('Sort Blood', choices=SORT_TYPES, validators=[InputRequired()])
+    submit = SubmitField('Confirm')

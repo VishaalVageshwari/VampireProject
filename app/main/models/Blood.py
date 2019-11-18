@@ -134,3 +134,12 @@ def bubblesort_volume(blood, asc):
         i -= 1
 
     return blood
+
+def filter_blood_type(blood, blood_type):
+    filtered_blood = []
+
+    for b in blood:
+        if b.blood_type == blood_type:
+            filtered_blood.append(b)
+    
+    return filtered_blood
