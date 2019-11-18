@@ -56,6 +56,25 @@ class Blood:
             .format(self.blood_id, self.blood_type, self.donor_name)
 
 
+class BloodTypeLevel:
+
+    def __init__(self, blood_type):
+        self._blood_type = blood_type
+        self._total = 0
+
+    @property
+    def blood_type(self):
+        return self._blood_type
+
+    @property
+    def total(self):
+        return self._total
+
+    @total.setter
+    def total(self, total):
+        self._total = total
+
+
 def get_all_blood():
     blood_list = []
     db_blood = dbBlood.query.all()
@@ -102,7 +121,7 @@ def get_disposable_blood():
     disposable_blood = []
 
     for b in blood:
-        if not b,suitablity or current_date > b.use_by_date:
+        if not b.suitablity or current_date > b.use_by_date:
             disposable_blood.append(b)
 
     return disposable_blood
@@ -125,10 +144,54 @@ def get_remove_blood():
     remove_blood = []
 
     for b in blood:
-        if b.ordered or not b,suitablity or current_date > b.use_by_date:
+        if b.ordered or not b.suitablity or current_date > b.use_by_date:
             remove_blood.append(b)
 
-    return remove_blood  
+    return remove_blood
+
+
+def get_total_blood_volume():
+    blood = get_requestable_blood()
+    total = 0
+
+    for b in blood:
+        total += b.volume
+
+    return total
+
+def get_blood_levels():
+    blood = get_requestable_blood()
+    ap_blood = BloodTypeLevel("A+")
+    an_blood = BloodTypeLevel("A-")
+    bp_blood = BloodTypeLevel("B+")
+    bn_blood = BloodTypeLevel("B-")
+    abp_blood = BloodTypeLevel("AB+")
+    abn_blood = BloodTypeLevel("AB-")
+    op_blood = BloodTypeLevel("O+")
+    on_blood = BloodTypeLevel("O-")
+
+    for b in blood:
+        if b.blood_type == "A+":
+            ap_blood.total += b.volume
+        elif b.blood_type == "A-":
+            an_blood.total += b.volume
+        elif b.blood_type == "B+":
+            bp_blood.total += b.volume
+        elif b.blood_type == "B-":
+            bn_blood.total += b.volume
+        elif b.blood_type == "AB+":
+            abp_blood.total += b.volume
+        elif b.blood_type == "AB-":
+            abn_blood.total += b.volume
+        elif b.blood_type == "O+":
+            ap_blood.total += b.volume
+        elif b.blood_type == "O-":
+            an_blood.total += b.volume
+
+    blood_levels = [ap_blood, an_blood, bp_blood, bn_blood, 
+        abp_blood, abn_blood, op_blood, on_blood]
+
+    return blood_levels            
 
 
 def bubblesort_expiration(blood, asc):
