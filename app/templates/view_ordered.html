@@ -4,7 +4,7 @@
 {% block app_content %}
 <div class="container">
   <div>
-    {{ wtf.quick_form(form) }}
+      {#{ wtf.quick_form(form) }#}
   </div>
   </br></br></br>
   <div class="flex-centre">
@@ -30,9 +30,6 @@
             <td>{{ b.location }}</td>
             <td>{{ b.donor_name }}</td>
             <td>{{ b.donor_email }}</td>
-            <td>
-                <form method="POST"><button type="submit" name="remove" value="{{  b.blood_id  }}">X</button></form>
-            </td>
           </tr>
           {% endfor %}
       </tbody>
