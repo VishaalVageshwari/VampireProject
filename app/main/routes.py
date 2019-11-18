@@ -5,7 +5,7 @@ from app.models import Blood as dbBlood, RequestedBlood, BloodRequest, BloodOrde
 from app.main import bp
 from app.main.models.Blood import Blood, BloodTypeLevel, get_requestable_blood, \
     bubblesort_expiration, bubblesort_volume, filter_blood_type, get_blood_levels, \
-    get_ordered_blood, get_total_blood_volume
+    get_ordered_blood, get_total_blood_volume, get_disposable_blood
 from datetime import date
 from app.main.request import allocate_blood
 
@@ -34,18 +34,10 @@ def add_blood():
 @bp.route('/view', methods=['GET', 'POST'])
 def view_blood():
     form = ViewBloodForm()
-    today = date.today()
     blood = get_requestable_blood()
-    display_format = 'donation'
     bloodID = -1
     if request.method == 'POST':
-        if "remove" in request.form:
-            bloodId = request.form.get("remove")
-            blood_to_remove = dbBlood.query.get(bloodId)
-            db.session.delete(blood_to_remove)
-            db.session.commit()
-            blood = get_requestable_blood()
-        elif form.validate_on_submit():
+        if form.validate_on_submit():
             filter_type = form.filter_type.data
             sort_type = form.sort_blood.data
             if filter_type != 'No Filter':
@@ -100,7 +92,6 @@ def request_blood():
 @bp.route('/ordered', methods=['GET', 'POST'])
 def ordered_blood():
     form = ViewBloodForm()
-    today = date.today()
     blood = get_ordered_blood()
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -127,3 +118,31 @@ def blood_levels():
     blood_levels = get_blood_levels()
     blood_total = get_total_blood_volume()
     return render_template('blood_levels.html', title='Blood Levels', blood_total=blood_total, blood_levels=blood_levels)
+
+
+@bp.route('/remove_blood', methods=['GET', 'POST'])
+def remove_blood():
+    form = ViewBloodForm()
+    blood = get_disposable_blood()
+    bloodID = -1
+    if request.method == 'POST':
+        if "remove" in request.form:
+            bloodId = request.form.get("remove")
+            blood_to_remove = dbBlood.query.get(bloodId)
+            db.session.delete(blood_to_remove)
+            db.session.commit()
+        elif form.validate_on_submit():
+            filter_type = form.filter_type.data
+            sort_type = form.sort_blood.data
+            if filter_type != 'No Filter':
+                blood = filter_blood_type(blood, filter_type)
+
+            if sort_type == 'Volume: Low-High':
+                blood = bubblesort_volume(blood, True)
+            elif sort_type == 'Volume: High-Low':
+                blood = bubblesort_volume(blood, False)
+            elif sort_type == 'Use-By-Date: Earliest-Latest':
+                blood = bubblesort_expiration(blood, True)
+            elif sort_type == 'Use-By-Date: Latest-Earliest':
+                blood = bubblesort_expiration(blood, False)
+    return render_template('remove_blood.html', title='View Blood', blood=blood, form=form)
