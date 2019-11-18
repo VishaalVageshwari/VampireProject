@@ -13,6 +13,7 @@ SORT_TYPES = [('Default', 'Default'),('Volume: Low-High', 'Volume: Low-High'),
 
 FILTER_TYPES = [('No Filter', 'No Filter')] + BLOOD_TYPES
 
+
 class AddBloodForm(FlaskForm):
     blood_type = SelectField('Blood Type', choices=BLOOD_TYPES, validators=[InputRequired()])
     volume = IntegerField('Volume In Liters', validators=[InputRequired()])
@@ -44,6 +45,7 @@ class RequestBloodForm(FlaskForm):
     volume = IntegerField('Volume in Liters', validators=[InputRequired(), NumberRange(min = 1)])
     delivery_date = DateField('Deliver-By Date', format='%d-%m-%Y', render_kw={"placeholder": "dd-mm-yyyy"}, validators=[InputRequired()])
     submit = SubmitField('Submit')
+
 
 class ViewBloodForm(FlaskForm):
     filter_type = SelectField('Filter By Blood Type', choices=FILTER_TYPES, validators=[InputRequired()])
