@@ -27,6 +27,10 @@ class Blood:
     def volume(self):
         return self._volume
 
+    @volume.setter
+    def volume(self, value):
+        self._volume = value
+
     @property
     def suitablity(self):
         return self._suitablity
