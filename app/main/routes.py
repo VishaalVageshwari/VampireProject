@@ -61,15 +61,13 @@ def request_blood():
         blood_type = form.blood_type.data
         volume = form.volume.data
         delivery_date = form.delivery_date.data
-
-        # TODO: make a BloodRequest and put it in the db
         blood = allocate_blood(blood_type=blood_type, volume=volume, delivery_date=delivery_date)
         if blood is None:
             flash('Not enough suitable blood to satisfy the request')
+        else:
             for donation in blood:
                 order = BloodOrder(medical_id=0, blood_id=donation.blood_id, date_required=delivery_date)
                 db.session.add(order)
-
             db.session.commit()
             flash('Your request has been successfully made')
 
