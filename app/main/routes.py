@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import db
 from app.main.forms import AddBloodForm, ViewBloodForm, RequestBloodForm
-from app.models import Blood as dbBlood
+from app.models import Blood as dbBlood, RequestedBlood, BloodRequest, BloodOrder
 from app.main import bp
 from app.main.models.Blood import Blood, get_requestable_blood, bubblesort_expiration, \
     bubblesort_volume, filter_blood_type
@@ -71,16 +71,21 @@ def request_blood():
         if blood is None:
             flash('Not enough suitable blood to satisfy the request')
         else:
-            volumeReceived = 0
-            for i in blood:
-                if i.blood_type == blood_type and volumeReceived < volume:
-                    volumeReceived = volumeReceived + 1
-                    i.volume -= 1
-                    db.session.commit()
-                    if i.volume == 0 :
-                        db.session.delete(i)
-                        db.session.commit()
+            # volumeReceived = 0
+            # for i in blood:
+            #     if i.blood_type == blood_type and volumeReceived < volume:
+            #         volumeReceived = volumeReceived + 1
+            #         i.volume -= 1
+            #         db.session.commit()
+            #         if i.volume == 0 :
+            #             db.session.delete(i)
+            #             db.session.commit()
 
+            for donation in blood:
+                order = BloodOrder(medical_id=0, blood_id=donation.blood_id, date_required=delivery_date)
+                db.session.add(order)
+
+            db.session.commit()
             flash('Your request has been successfully made')
 
     return render_template('request_blood.html', title='Request Blood', form=form)
