@@ -1,7 +1,7 @@
 .env
-.vampire
 *.DS_Store
 *.vscode
 *__pycache__
 vampire.db
 env
+vampire
