@@ -11,7 +11,7 @@
     <table class="table">
       <thead class="thead-dark">
         <tr>
-          <th colspan="8">Expired And Unsuitable Blood</th>
+          <th colspan="9">Expired And Unsuitable Blood</th>
         </tr>
         <tr>
           <th scope="col">ID</th>
@@ -21,6 +21,7 @@
           <th scope="col">Location Donated</th>
           <th scope="col">Donor Name</th>
           <th scope="col">Donor Email</th>
+          <th scope="col">Suitable</th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -34,6 +35,7 @@
             <td>{{ b.location }}</td>
             <td>{{ b.donor_name }}</td>
             <td>{{ b.donor_email }}</td>
+            <td>{{ b.suitablity }}</td>
             <td>
                 <form method="POST"><button type="submit" name="remove" value="{{  b.blood_id  }}">X</button></form>
             </td>
