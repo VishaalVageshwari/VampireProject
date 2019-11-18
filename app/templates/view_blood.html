@@ -1,40 +1,40 @@
 {% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
 {% block app_content %}
-
-<form method="post">
-  <input type="submit" value="expiry" name="sort"/>
-  <input type="submit" value="volume" name="sort" />
-</form>
-
-  <div class="container flex-centre" style="height: 75vh;">
-    <div class="row jumbotron flex-centre">
-        <ul>
-            {% if display_format == "donation" %}
-              {% for b in blood %}
-              {% if b.use_by_date < date %}
-              <li style="color: red;">
-              {% else %}
-              <li>
-              {% endif %}
-                <span>"Blood type: "{{b.blood_type}} </span>
-                <span>"Blood volume: "{{b.volume}} </span>
-                <span>"Use-by date: "{{b.use_by_date}}</span>
-              </li>
-              {% endfor %}
-            {% else %}
-              {% for b in blood %}
-              {% if b.volume < 5 %}
-              <li style="color: red;">
-              {% else %}
-              <li>
-              {% endif %}
-                <span>"Blood type: "{{b.blood_type}} </span>
-                <span>"Total volume: "{{b.volume}} </span>
-              </li>
-              {% endfor %}
-            {% endif %}  
-        </ul>
-    </div>
+<div class="container">
+  <div>
+      {{ wtf.quick_form(form) }}
   </div>
+  </br></br></br>
+  <div class="flex-centre">
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Blood Type</th>
+          <th scope="col">Volume</th>
+          <th scope="col">Use-By-Date</th>
+          <th scope="col">location Donated</th>
+          <th scope="col">Donor Name</th>
+          <th scope="col">Donor Email</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for b in blood %}
+          <tr>
+            <td>{{ b.blood_id }}</td>
+            <td>{{ b.blood_type }}</td>
+            <td>{{ b.volume }}</td>
+            <td>{{ b.use_by_date }}</td>
+            <td>{{ b.location }}</td>
+            <td>{{ b.donor_name }}</td>
+            <td>{{ b.donor_email }}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 
 {% endblock %}
