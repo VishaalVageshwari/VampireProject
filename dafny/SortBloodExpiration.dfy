@@ -99,7 +99,6 @@ modifies a;
     var j := 0;
 
     while j < i
-    decreases i - j;
     invariant 0 < i < a.Length && 0 <= j <= i;
     invariant forall j :: 0 <= j < a.Length ==> a[j] != null && a[j].Valid();
     invariant asc ==> (forall k :: 0 <= k <= j 
@@ -108,6 +107,7 @@ modifies a;
       ==> a[j].use_by_date <= a[k].use_by_date);
     invariant SortedBetweenExpiration(a, asc, i, a.Length - 1);
     invariant PartitionExpiration(a, asc, i);
+    decreases i - j;
     {  
       if asc && (a[j].use_by_date > a[j + 1].use_by_date)
       {

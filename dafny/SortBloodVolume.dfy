@@ -83,7 +83,7 @@ method BubbleSortVolume(a: array<Blood>, asc: bool)
 requires a != null;
 requires forall j :: 0 <= j < a.Length ==> a[j] != null && a[j].Valid();
 ensures forall j :: 0 <= j < a.Length ==> a[j] != null && a[j].Valid();
-ensures SortedExpiration(a, asc);
+ensures SortedVolume(a, asc);
 modifies a;
 {
   var i := a.Length - 1;
@@ -92,22 +92,22 @@ modifies a;
   invariant i < 0 ==> a.Length == 0;
   invariant -1 <= i < a.Length;
   invariant forall j :: 0 <= j < a.Length ==> a[j] != null && a[j].Valid();
-  invariant SortedBetweenExpiration(a, asc, i, a.Length - 1);
-  invariant PartitionExpiration(a, asc, i);
+  invariant SortedBetweenVolume(a, asc, i, a.Length - 1);
+  invariant PartitionVolume(a, asc, i);
   decreases i;
   {
     var j := 0;
 
     while j < i
-    decreases i - j;
     invariant 0 < i < a.Length && 0 <= j <= i;
     invariant forall j :: 0 <= j < a.Length ==> a[j] != null && a[j].Valid();
     invariant asc ==> (forall k :: 0 <= k <= j 
       ==> a[k].volume <= a[j].volume);
     invariant !asc ==> (forall k :: 0 <= k <= j 
       ==> a[j].volume <= a[k].volume);
-    invariant SortedBetweenExpiration(a, asc, i, a.Length - 1);
-    invariant PartitionExpiration(a, asc, i);
+    invariant SortedBetweenVolume(a, asc, i, a.Length - 1);
+    invariant PartitionVolume(a, asc, i);
+    decreases i - j;
     {  
       if asc && (a[j].volume > a[j + 1].volume)
       {
@@ -144,13 +144,13 @@ method Main()
   assert a[2] == b3 && a[2] != null && a[2].Valid();
   assert forall j :: 0 <= j < a.Length ==> a[j] != null && a[j].Valid();
   
-  BubbleSortExpiration(a, true);
-  assert SortedExpiration(a, true);
+  BubbleSortVolume(a, true);
+  assert SortedVolume(a, true);
 
   print a[0].blood_id, " ", a[1].blood_id, " ", a[2].blood_id, "\n";
 
-  BubbleSortExpiration(a, false);
-  assert SortedExpiration(a, false);
+  BubbleSortVolume(a, false);
+  assert SortedVolume(a, false);
 
   print a[0].blood_id, " ", a[1].blood_id, " ", a[2].blood_id, "\n";
 }
