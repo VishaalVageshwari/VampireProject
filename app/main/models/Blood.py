@@ -125,7 +125,7 @@ def get_disposable_blood():
     disposable_blood = []
 
     for b in blood:
-        if not b.suitablity or current_date > b.use_by_date:
+        if not b.ordered and (not b.suitablity or current_date > b.use_by_date):
             disposable_blood.append(b)
 
     return disposable_blood
