@@ -7,7 +7,6 @@ from app.main.models.Blood import Blood, BloodTypeLevel, get_requestable_blood, 
     bubblesort_expiration, bubblesort_volume, filter_blood_type, get_blood_levels, \
     get_ordered_blood, get_total_blood_volume, get_disposable_blood
 from app.main.request import allocate_blood
-from datetime import date
 
 
 @bp.route('/', methods=['GET'])
