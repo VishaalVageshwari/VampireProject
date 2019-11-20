@@ -231,6 +231,16 @@ predicate satisfiable(
         volume_required <= 0
 }
 
+function sumVolume(blood: seq<Blood>): int
+    requires forall j :: 0 <= j < |blood| ==> blood[j] != null;
+    reads blood;
+{
+    if |blood| > 0 then
+        blood[0].volume + sumVolume(blood[1..])
+    else
+        0
+}
+
 method AllocateBlood(
          all_blood: seq<Blood>,
          blood_type: BloodType,
@@ -242,11 +252,19 @@ method AllocateBlood(
     requires delivery_date > 0;
     
     ensures forall j :: 0 <= j < |allocation| ==> allocation[j] != null;
-    ensures
-        if satisfiable(all_blood, blood_type, volume_required, delivery_date) then
-            forall j :: 0 <= j < |allocation| ==> allocation[j].blood_type == blood_type
-        else
-            allocation == [];
+    // ensures
+    //     if satisfiable(all_blood, blood_type, volume_required, delivery_date) then
+    //         forall j :: 0 <= j < |allocation| ==> allocation[j].blood_type == blood_type
+    //     else
+    //         allocation == [];
+  
+    ensures satisfiable(all_blood, blood_type, volume_required, delivery_date) ==> (
+        forall j :: 0 <= j < |allocation| ==> (
+            allocation[j].blood_type == blood_type &&
+            allocation[j].use_by_date >= delivery_date
+        ) &&
+        sumVolume(allocation) >= volume_required
+    );
         
 {
     var blood_entries: seq<Blood>;
@@ -305,9 +323,10 @@ method AllocateBlood(
         invariant forall j :: 0 <= j < blood_arr.Length ==> blood_arr[j] != null && blood_arr[j].Valid();
         invariant forall j :: 0 <= j < |allocation| ==> allocation[j] != null;
         invariant forall j :: 0 <= j < |allocation| ==> allocation[j].blood_type == blood_type;
+        invariant forall j :: 0 <= j < |allocation| ==> allocation[j].use_by_date >= delivery_date;
     {
         volume := SumBloodVolume(blood_arr[..]);
-        if (volume < volume_required && blood_arr[i].blood_type == blood_type) {
+        if (volume < volume_required && blood_arr[i].blood_type == blood_type && blood_arr[i].use_by_date >= delivery_date) {
             allocation := allocation + [blood_arr[i]];
         }
         i := i + 1;
