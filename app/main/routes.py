@@ -6,8 +6,9 @@ from app.main import bp
 from app.main.models.Blood import Blood, BloodTypeLevel, get_requestable_blood, \
     bubblesort_expiration, bubblesort_volume, filter_blood_type, get_blood_levels, \
     get_ordered_blood, get_total_blood_volume, get_disposable_blood
-from datetime import date
 from app.main.request import allocate_blood
+from datetime import date
+
 
 @bp.route('/', methods=['GET'])
 @bp.route('/index', methods=['GET'])
@@ -53,6 +54,7 @@ def view_blood():
             elif sort_type == 'Use-By-Date: Latest-Earliest':
                 blood = bubblesort_expiration(blood, False)
     return render_template('view_blood.html', title='View Blood', blood=blood, form=form)
+
 
 @bp.route('/request_blood', methods=['GET', 'POST'])
 def request_blood():

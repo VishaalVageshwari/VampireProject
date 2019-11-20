@@ -1,5 +1,3 @@
-# from app.models import Blood, bubblesort_expiration
-
 from app.main.models.Blood import Blood, get_requestable_blood, bubblesort_expiration
 
 def is_suitable_type(blood, blood_type):
