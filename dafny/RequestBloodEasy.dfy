@@ -102,27 +102,8 @@ ensures forall j :: 0 <= j < |order| ==> order[j].use_by_date <= deliverByDate
     }
     var True: bool;
     True := true;
-
-    var suitableArray: array<Blood>;
-    suitableArray := new Blood[|suitable|](i requires 0 <= i < |suitable| reads suitable => suitable[i]);
     i := 0;
-    while (i < |suitable|)
-        decreases |suitable| - i
-        invariant 0 <= i <= |suitable|;
-        invariant forall j :: 0 <= j < |suitable| ==> suitable[j] != null && suitable[j].Valid();
-        invariant forall j :: 0 <= j < i ==> suitableArray[j] != null && suitableArray[j].Valid();
-        invariant forall j :: 0 <= j < suitableArray.Length ==> suitableArray[j].suitablity == true && suitableArray[j].use_by_date <= deliverByDate && suitableArray[j].blood_type == bt
-    {
-        suitableArray[i] := suitable[i];
-        i := i + 1;
-        assert suitableArray[i - 1] != null && suitableArray[i - 1].Valid();
-    }
-    
-    //forall i | 0 <= i && i < suitableArray.Length { suitableArray[i] := suitable[i] ; }
-    assert forall j :: 0 <= j < suitableArray.Length ==> suitableArray[j].suitablity == true && suitableArray[j].use_by_date <= deliverByDate && suitableArray[j].blood_type == bt;
-    suitable := suitableArray[0..suitableArray.Length];
     order := [];
-    i := 0;
     while i < |suitable|
     decreases |suitable| - i
     invariant forall j :: 0 <= j < |suitable| ==> suitable[j].suitablity == true && suitable[j].use_by_date <= deliverByDate && suitable[j].blood_type == bt
