@@ -49,6 +49,7 @@ reads set x | x in a[..];
 
 
 method hasEnoughVolume(blood: seq<Blood>, volume: int) returns (b: bool)
+requires forall x :: 0 <= x < |blood| ==> blood[x] != null
 {   
     b := false;
     var i : int;
@@ -58,6 +59,7 @@ method hasEnoughVolume(blood: seq<Blood>, volume: int) returns (b: bool)
 
     while i < |blood|
     decreases |blood| - i
+    invariant 0 <= i <= |blood|
     {
         totalVolume := totalVolume + blood[i].volume;
         i := i + 1;
@@ -69,7 +71,7 @@ method hasEnoughVolume(blood: seq<Blood>, volume: int) returns (b: bool)
 }
 
 method requestBlood(allBlood: seq<Blood>, bt: BloodType, amount: int, deliverByDate: int) returns (order: seq<Blood>)
-requires forall i :: 0 <= i < |allBlood| ==> allBlood[i].Valid();
+requires forall i :: 0 <= i < |allBlood| ==> allBlood[i] != null && allBlood[i].Valid()
 requires SortedExpiration(allBlood, true)
 ensures forall j :: 0 <= j < |order| ==> order[j] != null
 ensures forall j :: 0 <= j < |order| ==> order[j].blood_type == bt
@@ -106,12 +108,12 @@ ensures forall j :: 0 <= j < |order| ==> order[j].use_by_date <= deliverByDate
     order := [];
     while i < |suitable|
     decreases |suitable| - i
-    invariant forall j :: 0 <= j < |suitable| ==> suitable[j].suitablity == true && suitable[j].use_by_date <= deliverByDate && suitable[j].blood_type == bt
-    invariant forall j :: 0 <= j < |order| ==> order[j].suitablity == true && order[j].use_by_date <= deliverByDate && order[j].blood_type == bt
+    invariant forall j :: 0 <= j < |suitable| ==> suitable[j] != null && suitable[j].suitablity == true && suitable[j].use_by_date <= deliverByDate && suitable[j].blood_type == bt && suitable[j].Valid()
+    invariant forall j :: 0 <= j < |order| ==> order[j] != null && order[j].suitablity == true && order[j].use_by_date <= deliverByDate && order[j].blood_type == bt && order[j].Valid()
     {
         check := hasEnoughVolume(order, amount);
         if !check{
-            order := order + suitable[i..i+1];
+            order := order + [suitable[i]];
         }
         i := i + 1;
     }
