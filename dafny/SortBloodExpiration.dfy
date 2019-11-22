@@ -12,6 +12,8 @@ class Blood {
   var donor_email: string;
   var ordered: bool;
 
+  // Prevents invalid blood in the system such as negative volume, date or
+  // empty location, donor name or email
   predicate Valid()
   reads this;
   {
@@ -19,6 +21,7 @@ class Blood {
     location != "" && donor_name != "" && donor_email != ""
   }
 
+  // Creates new Blood
   constructor (id: int, b: BloodType, v: int, s: bool, u: int,
     l: string, dn: string, de: string, o: bool)
   requires v > 0 && u > 0;
@@ -37,6 +40,7 @@ class Blood {
     ordered := o;
   }
 
+  // Changes the ordered attribute
   method OrderBlood()
   requires Valid();
   ensures Valid();

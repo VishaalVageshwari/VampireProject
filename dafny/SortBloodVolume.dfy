@@ -40,7 +40,7 @@ class Blood {
     ordered := o;
   }
 
-
+  // Changes the ordered attribute
   method OrderBlood()
   requires Valid();
   ensures Valid();
