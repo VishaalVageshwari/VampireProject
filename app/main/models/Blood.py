@@ -78,6 +78,9 @@ class BloodTypeLevel:
     def total(self, total):
         self._total = total
 
+    def add_to_total(self, volume):
+        self.total += volume
+
 
 def get_all_blood():
     blood_list = []
@@ -176,21 +179,21 @@ def get_blood_levels():
 
     for b in blood:
         if b.blood_type == "A+":
-            ap_blood.total += b.volume
+            ap_blood.add_to_total(b.volume)
         elif b.blood_type == "A-":
-            an_blood.total += b.volume
+            an_blood.add_to_total(b.volume)
         elif b.blood_type == "B+":
-            bp_blood.total += b.volume
+            bp_blood.add_to_total(b.volume)
         elif b.blood_type == "B-":
-            bn_blood.total += b.volume
+            bn_blood.add_to_total(b.volume)
         elif b.blood_type == "AB+":
-            abp_blood.total += b.volume
+            abp_blood.add_to_total(b.volume)
         elif b.blood_type == "AB-":
-            abn_blood.total += b.volume
+            abn_blood.add_to_total(b.volume)
         elif b.blood_type == "O+":
-            ap_blood.total += b.volume
+            op_blood.add_to_total(b.volume)
         elif b.blood_type == "O-":
-            an_blood.total += b.volume
+            on_blood.add_to_total(b.volume)
 
     blood_levels = [ap_blood, an_blood, bp_blood, bn_blood, 
         abp_blood, abn_blood, op_blood, on_blood]
