@@ -14,7 +14,6 @@ Instructions for setup
 ```.\venv\Scripts\activate```
 
 3. Install dependencies
-Change directory to vampireproject where requriements.txt is and do:
 
 ```pip install -r requirements.txt```
 
