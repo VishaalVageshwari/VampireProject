@@ -153,7 +153,7 @@ method Main()
   assert b4 != null && b4.Valid();
 
   var a := new Blood[4];
-  a[0], a[1], a[2], a[4] := b2, b1, b3, b4;
+  a[0], a[1], a[2], a[3] := b2, b1, b3, b4;
 
   assert a[0] == b2 && a[0] != null && a[0].Valid();
   assert a[1] == b1 && a[1] != null && a[1].Valid();
