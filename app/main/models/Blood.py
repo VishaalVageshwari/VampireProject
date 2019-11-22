@@ -115,7 +115,7 @@ def get_requestable_blood():
     for b in blood:
         if not b.ordered and b.suitablity and current_date <= b.use_by_date:
             requestable_blood.append(b)
-
+    requestable_blood = bubblesort_expiration(requestable_blood, True)
     return requestable_blood
 
 

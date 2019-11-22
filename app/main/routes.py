@@ -102,7 +102,7 @@ def ordered_blood():
 @bp.route('/blood_levels', methods=['GET'])
 def blood_levels():
     blood_levels = get_blood_levels()
-    blood_total = get_total_blood_volume()
+    blood_total = get_total_blood_volume() 
     return render_template('blood_levels.html', title='Blood Levels', blood_total=blood_total, blood_levels=blood_levels)
 
 
