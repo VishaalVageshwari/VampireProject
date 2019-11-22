@@ -29,9 +29,6 @@ def allocate_blood(blood_type, volume, delivery_date):
     if not has_volume(suitable_blood, volume):
         return None
 
-    # allocate blood, prioritising blood that expires soonest
-    suitable_blood = bubblesort_expiration(suitable_blood, True)
-
     allocation = []
     for blood in suitable_blood:
         if not has_volume(allocation, volume):
