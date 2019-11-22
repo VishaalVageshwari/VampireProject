@@ -70,12 +70,12 @@ requires forall x :: 0 <= x < |blood| ==> blood[x] != null
     }
 }
 
-method requestBlood(allBlood: seq<Blood>, bt: BloodType, amount: int, deliverByDate: int) returns (order: seq<Blood>)
+method requestBlood(allBlood: seq<Blood>, bt: BloodType, amount: int, deliverByDate: int) returns (allocation: seq<Blood>)
 requires forall i :: 0 <= i < |allBlood| ==> allBlood[i] != null && allBlood[i].Valid()
 requires SortedExpiration(allBlood, true)
-ensures forall j :: 0 <= j < |order| ==> order[j] != null
-ensures forall j :: 0 <= j < |order| ==> order[j].blood_type == bt
-ensures forall j :: 0 <= j < |order| ==> order[j].use_by_date <= deliverByDate
+ensures forall j :: 0 <= j < |allocation| ==> allocation[j] != null
+ensures forall j :: 0 <= j < |allocation| ==> allocation[j].blood_type == bt
+ensures forall j :: 0 <= j < |allocation| ==> allocation[j].use_by_date <= deliverByDate
 {
     var i: int;
     i := 0;
@@ -99,21 +99,21 @@ ensures forall j :: 0 <= j < |order| ==> order[j].use_by_date <= deliverByDate
     var check : bool;
     check := hasEnoughVolume(suitable, amount);
     if !check{
-        order := [];
+        allocation := [];
         return;
     }
     var True: bool;
     True := true;
     i := 0;
-    order := [];
+    allocation := [];
     while i < |suitable|
     decreases |suitable| - i
     invariant forall j :: 0 <= j < |suitable| ==> suitable[j] != null && suitable[j].suitablity == true && suitable[j].use_by_date <= deliverByDate && suitable[j].blood_type == bt && suitable[j].Valid()
-    invariant forall j :: 0 <= j < |order| ==> order[j] != null && order[j].suitablity == true && order[j].use_by_date <= deliverByDate && order[j].blood_type == bt && order[j].Valid()
+    invariant forall j :: 0 <= j < |allocation| ==> allocation[j] != null && allocation[j].suitablity == true && allocation[j].use_by_date <= deliverByDate && allocation[j].blood_type == bt && allocation[j].Valid()
     {
-        check := hasEnoughVolume(order, amount);
+        check := hasEnoughVolume(allocation, amount);
         if !check{
-            order := order + [suitable[i]];
+            allocation := allocation + [suitable[i]];
         }
         i := i + 1;
     }
